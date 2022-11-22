@@ -1,7 +1,8 @@
 {
   "name": "rigelsdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "sdk for rigel",
+  "types": "lib/index.d.ts",
   "main": "index.js",
   "scripts": {
     "test": "jest --config jestconfig.json",
@@ -14,9 +15,15 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "rigel",
+    "image proxy",
+    "typescript",
+    "sdk",
+    "fast"
+  ],
+  "author": "sdqri",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
