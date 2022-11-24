@@ -2,11 +2,25 @@
  <h2 align="center">rigelsdk</h2>
  <p align="center">Typescript SDK for <a href="[rigel](https://github.com/sdqri/rigel)">rigel</a></p>
   <p align="center">
+  <a href="https://github.com/sdqri/rigelsdk/issues">
+      <img alt="Issues" src="https://img.shields.io/github/issues/sdqri/rigelsdk?style=flat&color=336791" />
+    </a>
+    <a href="https://github.com/sdqri/rigelsdk/pulls">
+      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/sdqri/rigelsdk?style=flat&color=336791" />
+    </a>
+     <a href="https://github.com/sdqri/rigelsdk">
+      <img alt="GitHub Downloads" src="https://img.shields.io/npm/dw/rigelsdk?style=flat&color=336791" />
+    </a>
+    <a href="https://github.com/sdqri/rigelsdk">
+      <img alt="GitHub Total Downloads" src="https://img.shields.io/npm/dt/rigelsdk?color=336791&label=Total%20downloads" />
+    </a>
+ <a href="https://github.com/sdqri/rigelsdk">
+      <img alt="GitHub release" src="https://img.shields.io/github/release/sdqri/rigelsdk.svg?style=flat&color=336791" />
+    </a>
     <br />
-  <a href="https://github.com/hebertcisco/emoji-library/issues/new/choose">Report Bug</a> /
-  <a href="https://github.com/hebertcisco/emoji-library/issues/new/choose">Request Feature</a>
+  <a href="https://github.com/sdqri/rigelsdk/issues/new/choose">Report Bug</a> /
+  <a href="https://github.com/sdqri/rigelsdk/issues/new/choose">Request Feature</a>
   </p>
- 
 
 # Getting started
 
@@ -40,17 +54,17 @@ const rigelsdk = require('rigelsdk');
 
 ```cjs
 #!/usr/bin/env node
-const algorithm = 'ES256'
+const algorithm = 'ES256';
 const pkcs8 = `-----BEGIN PRIVATE KEY-----
 PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
 PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
 PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
------END PRIVATE KEY-----`
-const url = "<put rigel url here>"
-const imageURL = "<put image url here>"
+-----END PRIVATE KEY-----`;
+const url = '<put rigel url here>';
+const imageURL = '<put image url here>';
 
 const rigelSDK = new rigelsdk.SDK(url, algorithm, pkcs8);
-const imageURL = await rigelSDK.createImageURL(imageURL, options)
+const imageURL = await rigelSDK.createImageURL(imageURL, options);
 ```
 
 ## 🤝 Contributing
