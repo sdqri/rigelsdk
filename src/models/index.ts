@@ -1,3 +1,5 @@
+import * as consts from '../consts';
+
 export class Options {
   Height?: number;
   Width?: number;
@@ -23,10 +25,10 @@ export class Options {
   Extend?: string;
   Rotate?: string;
   Background?: string;
-  Gravity?: string;
+  Gravity?: consts.Gravity;
   Watermark?: string;
   WatermarkImage?: string;
-  Type?: string;
+  Type?: consts.ImageType;
   Interpolator?: string;
   Interpretation?: string;
   GaussianBlur?: string;
