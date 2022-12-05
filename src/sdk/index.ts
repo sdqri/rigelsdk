@@ -12,7 +12,7 @@ export class SDK {
     this.key = jose.importPKCS8(pkcs8Key, alg);
   }
 
-  public async createImageURL(imageURL: string, Options: models.Options): Promise<string> {
+  public async createImageURL(imageURL: string, Options: models.Options, exp: string|number): Promise<string> {
     const key = await this.key;
     const res = {
       url: imageURL,
@@ -22,9 +22,9 @@ export class SDK {
     const jwt = await new jose.SignJWT({ res: resJson })
       .setProtectedHeader({ alg: this.alg })
       .setIssuedAt()
-      .setExpirationTime('2h')
+      .setExpirationTime(exp)
       .sign(key);
-    const rigelURL: string = `${this.url}/rigel?req=${jwt}`;
+    const rigelURL: string = `${this.url}/img/${jwt}`;
     return rigelURL;
   }
 }

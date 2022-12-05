@@ -1,9 +1,9 @@
 {
   "name": "rigelsdk",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "sdk for rigel",
   "types": "lib/index.d.ts",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest --config jestconfig.json",
     "build": "tsc",
