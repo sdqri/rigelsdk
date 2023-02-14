@@ -67,9 +67,26 @@ describe('RigelSDK', () => {
       Type: rigelsdk.ImageType.WEBP,
     }); //5 for gravity smart
     const url: string =
-      'https://imgv3.fotor.com/images/homepage-feature-card/enhance-photo-of-three-girls-playing-in-the-sunflower-garden.png';
+      'https://cdn.isna.ir/d/2023/02/13/2/62521525.jpg';
     const Actual =
       'url/rigel?req=eyJhbGciOiJSUzI1NiJ9.eyJyZXMiOiJ7XCJ1cmxcIjpcImh0dHBzOi8vdXBsb2FkLndpa2ltZWRpYS5vcmcvd2lraXBlZGlhL2NvbW1vbnMvdGh1bWIvYi9iYy9Ud28tYnVybmluZy1tYW4tZm91bmRlcnMucG5nLzMyMXB4LVR3by1idXJuaW5nLW1hbi1mb3VuZGVycy5wbmdcIixcIm9wdGlvbnNcIjp7XCJXaWR0aFwiOjEyMCxcIkhlaWdodFwiOjEwfX0iLCJpYXQiOjE2Njk0OTgyNzUsImV4cCI6MTY2OTUwNTQ3NX0.SeNR2ItHDDl4VCv9K2ouQWicAJVjQ2aQ-hRN55H0A73otQWZ_4AbA8EmQXdmRRxSlfhtD_2XCGBVNVTsenj2i4rnU93b6EeoFcOBZvnBjtHiOE9IzCL3OTR8a3BR5AIzt9oDmFFbx_XdM9XnRV_LKbby1gB3oRvkn17x__RUd6NtAkKwluk75QLg0EYegOFuyP0zH-wPys8Uyu1Ts7H6KxnRt0B33-0vhcwUMfp-e7T80a48H-2ZaqXz2X8IOrS0N_1jVSSwydEh3buZbhGym5gn7jN82Kn7BqS3MOGzLvOMXH_oEyTiEE1i4Cik-mXXg50Ixlb0ge1NJ_V4AwLuulxSLdzN32Ts-f-6nrbd_OcRdiTJGi55jMewBpKb7tLCIFjwBEuXzRpJz7G8Q7tjGRXuN-AepgcALfQvd8dwCjPqOWA_Q2sf_y15r6Ig5_9vugYmzDOm4kYWd2PHWvPXOw5FHSrVQn2C5NE6X8JCakgmQRKTHDwLDkmEHZm4gtBCtrrbrsknzkS40b3cHvSC6q5Epa00z1hgwqi_bQotXmOvuZ-B-WWUzZchPAR8sgYUGBtEE0YL7CK-g9g8yPozjQiaSZ8RGvGNuuqubwKcBS9_BFSrrxML6JlZplj57_ss3h6w0zZdTnv4H9bjLBIZmPhHbcIiTUK8q3-_-heiHxU';
-    return rigelSDK.createImageURL(url, options, "12h").then((data) => expect(data).toBeTruthy());
+    return rigelSDK.createImageURL(url, options, "12h").then((data) => expect(data).toBe(2));
   });
+
+  test('defines CacheShortURL()', () => {
+    expect.assertions(1);
+    const options = new rigelsdk.Options({
+      Height: 120,
+      Width: 120,
+      Crop: true,
+      Gravity: rigelsdk.Gravity.GravitySmart,
+      Type: rigelsdk.ImageType.WEBP,
+    }); //5 for gravity smart
+    const url: string =
+      'https://cdn.isna.ir/d/2023/02/01/3/62506601.jpg';
+    const Actual =
+      'url/rigel?req=eyJhbGciOiJSUzI1NiJ9.eyJyZXMiOiJ7XCJ1cmxcIjpcImh0dHBzOi8vdXBsb2FkLndpa2ltZWRpYS5vcmcvd2lraXBlZGlhL2NvbW1vbnMvdGh1bWIvYi9iYy9Ud28tYnVybmluZy1tYW4tZm91bmRlcnMucG5nLzMyMXB4LVR3by1idXJuaW5nLW1hbi1mb3VuZGVycy5wbmdcIixcIm9wdGlvbnNcIjp7XCJXaWR0aFwiOjEyMCxcIkhlaWdodFwiOjEwfX0iLCJpYXQiOjE2Njk0OTgyNzUsImV4cCI6MTY2OTUwNTQ3NX0.SeNR2ItHDDl4VCv9K2ouQWicAJVjQ2aQ-hRN55H0A73otQWZ_4AbA8EmQXdmRRxSlfhtD_2XCGBVNVTsenj2i4rnU93b6EeoFcOBZvnBjtHiOE9IzCL3OTR8a3BR5AIzt9oDmFFbx_XdM9XnRV_LKbby1gB3oRvkn17x__RUd6NtAkKwluk75QLg0EYegOFuyP0zH-wPys8Uyu1Ts7H6KxnRt0B33-0vhcwUMfp-e7T80a48H-2ZaqXz2X8IOrS0N_1jVSSwydEh3buZbhGym5gn7jN82Kn7BqS3MOGzLvOMXH_oEyTiEE1i4Cik-mXXg50Ixlb0ge1NJ_V4AwLuulxSLdzN32Ts-f-6nrbd_OcRdiTJGi55jMewBpKb7tLCIFjwBEuXzRpJz7G8Q7tjGRXuN-AepgcALfQvd8dwCjPqOWA_Q2sf_y15r6Ig5_9vugYmzDOm4kYWd2PHWvPXOw5FHSrVQn2C5NE6X8JCakgmQRKTHDwLDkmEHZm4gtBCtrrbrsknzkS40b3cHvSC6q5Epa00z1hgwqi_bQotXmOvuZ-B-WWUzZchPAR8sgYUGBtEE0YL7CK-g9g8yPozjQiaSZ8RGvGNuuqubwKcBS9_BFSrrxML6JlZplj57_ss3h6w0zZdTnv4H9bjLBIZmPhHbcIiTUK8q3-_-heiHxU';
+    return rigelSDK.CacheShortURL(url, options, "12h").then((data) => expect(data).toBe(2));
+  });
+
 });

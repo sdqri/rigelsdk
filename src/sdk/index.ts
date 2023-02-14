@@ -1,3 +1,6 @@
+const crypto = require("crypto");
+
+import axios from 'axios';
 import * as jose from 'jose';
 import * as models from '../models';
 
@@ -22,9 +25,36 @@ export class SDK {
     const jwt = await new jose.SignJWT({ res: resJson })
       .setProtectedHeader({ alg: this.alg })
       .setIssuedAt()
-      .setExpirationTime(exp)
       .sign(key);
+    
     const rigelURL: string = `${this.url}/img/${jwt}`;
     return rigelURL;
   }
+
+  public async createImageHeadsupURL(imageURL: string, Options: models.Options, exp: string|number): Promise<string> {
+    const key = await this.key;
+    const res = {
+      url: imageURL,
+      options: Options,
+    };
+    const resJson = JSON.stringify(res);
+    const jwt = await new jose.SignJWT({ res: resJson })
+      .setProtectedHeader({ alg: this.alg })
+      .setIssuedAt()
+      .sign(key);
+    
+    const rigelURL: string = `${this.url}/headsup/${jwt}`;
+    return rigelURL;
+  }
+
+  public async CacheShortURL(imageURL: string, Options: models.Options, exp: string|number): Promise<string> {
+    const rigelURL = await this.createImageHeadsupURL(imageURL, Options,exp)
+    await axios.head(rigelURL);
+    const sha1 = crypto.createHash("sha1")
+    var token = rigelURL.split('/headsup/')[1]
+    sha1.update(token)
+    var shasum = sha1.digest("hex")
+    return shasum
+  }
+
 }
