@@ -1,4 +1,4 @@
-import * as consts from '../consts';
+import * as consts from '../consts/consts';
 
 export class Options {
   Height?: number;
@@ -43,5 +43,14 @@ export class Options {
 
   constructor(source?: Partial<Options>) {
     Object.assign(this, source);
+  }
+
+  QueryString() {
+    const queryParams = [];
+    for (const p in this)
+      if (this.hasOwnProperty(p)) {
+        queryParams.push(encodeURIComponent(p).toLowerCase() + '=' + encodeURIComponent(String(this[p])));
+      }
+    return queryParams.join('&');
   }
 }

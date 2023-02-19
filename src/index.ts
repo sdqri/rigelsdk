@@ -1,6 +1,6 @@
-import * as models from './models';
-import * as service from './sdk';
-import * as consts from './consts';
+import * as models from './models/models';
+import * as service from './sdk/sdk';
+import * as consts from './consts/consts';
 
 export const rigelsdk = {
   ...models,

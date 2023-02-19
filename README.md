@@ -54,17 +54,24 @@ const rigelsdk = require('rigelsdk');
 
 ```cjs
 #!/usr/bin/env node
-const algorithm = 'ES256';
-const pkcs8 = `-----BEGIN PRIVATE KEY-----
-PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
-PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
-PRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEYPRIVATEKEY
------END PRIVATE KEY-----`;
-const url = '<put rigel url here>';
-const imageURL = '<put image url here>';
+const KEY = 'secretkey';
+const SALT = 'secretsalt';
+const BASE_URL = '<put rigel url here>'; //~http://localhost:8080/rigel
 
-const rigelSDK = new rigelsdk.SDK(url, algorithm, pkcs8);
-const imageURL = await rigelSDK.createImageURL(imageURL, options);
+const rigelSDK = new rigelsdk.SDK(BASE_URL, KEY, SALT);
+
+const proxyURL = await rigelSDK.proxyImage(
+  'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
+  new rigelsdk.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
+  Date.now() + 1000 * 60 * 60 * 24, // 1 day expiry
+);
+
+// Creating short url
+const shortURL = await rigelSDK.tryShortURL(
+  'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
+  new rigelsdk.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
+  Date.now() + 1000 * 60 * 60 * 24, // 1 day expiry
+);
 ```
 
 ## 🤝 Contributing
