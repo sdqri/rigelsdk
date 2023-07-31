@@ -1,11 +1,11 @@
-import { pbkdf2Sync } from 'crypto';
-import rigelsdk from '../index';
+// import rigelsdk from '../index';
+import {service, models} from '../index';
 import { ImageType } from '../consts/consts';
 
 describe('RigelSDK', () => {
   const KEY = 'secretkey';
   const SALT = 'secretsalt';
-  const rigelSDK = new rigelsdk.SDK('http://localhost:8080/rigel', KEY, SALT);
+  const rigelSDK = new service.SDK('http://localhost:8080/rigel', KEY, SALT);
 
   test('proxyImage without options and expiry', async () => {
     const data = await rigelSDK.proxyImage(
@@ -21,7 +21,7 @@ describe('RigelSDK', () => {
   test('proxyImage with options, without expiry', async () => {
     const data = await rigelSDK.proxyImage(
       'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
-      new rigelsdk.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
+      new models.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
       -1,
     );
     expect(data).toBe(
@@ -32,7 +32,7 @@ describe('RigelSDK', () => {
   test('proxyImage with both options and expiry', async () => {
     const data = await rigelSDK.proxyImage(
       'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
-      new rigelsdk.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
+      new models.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
       1000 * 60 * 60 * 24,
     );
     expect(data).toBe(
@@ -43,7 +43,7 @@ describe('RigelSDK', () => {
   test('cacheImage', async () => {
     const data = await rigelSDK.cacheImage(
       'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
-      new rigelsdk.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
+      new models.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
       -1,
     );
     expect(data).toBe('fde5eda7214568293ad70621aec2ad1efee5c7fd');
@@ -52,7 +52,7 @@ describe('RigelSDK', () => {
   test('tryShortURL', async () => {
     const shortURL = await rigelSDK.tryShortURL(
       'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
-      new rigelsdk.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
+      new models.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
       -1,
     );
     expect(shortURL).toBe(
