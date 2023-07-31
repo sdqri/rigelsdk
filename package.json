@@ -1,6 +1,6 @@
 {
   "name": "rigelsdk",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "sdk for rigel",
   "types": "lib/index.d.ts",
   "main": "lib/index.js",
