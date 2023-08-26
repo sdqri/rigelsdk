@@ -1,5 +1,20 @@
 import * as consts from '../consts/consts';
 
+export class ProxyParams {
+  img: string = "";
+  options: Options = new Options();
+
+  constructor(source?: Partial<ProxyParams>) {
+    Object.assign(this, source);
+  }
+}
+
+export interface CacheImageResponse {
+  img: string;
+  signature: string;
+}
+
+
 export class Options {
   Height?: number;
   Width?: number;

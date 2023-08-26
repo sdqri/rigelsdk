@@ -72,6 +72,27 @@ const shortURL = await rigelSDK.tryShortURL(
   new rigelsdk.Options({ Width: 100, Height: 100, Type: ImageType.WEBP }),
   Date.now() + 1000 * 60 * 60 * 24, // 1 day expiry
 );
+
+// BatchedCache
+const batchedCachedImageArgs: models.ProxyParams[] = [
+  new models.ProxyParams({
+    img: 'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
+    options: new models.Options({
+      Height: 100,
+      Width: 100,
+      Type: ImageType.WEBP,
+    }),
+  }),
+  new models.ProxyParams({
+    img: 'hhtps://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg',
+    options: new models.Options({
+      Height: 100,
+      Width: 100,
+      Type: ImageType.WEBP,
+    }),
+  }),
+];
+const result: models.CacheImageResponse[] = await rigelSDK.batchedCacheImage(batchedCachedImageArgs, -1);
 ```
 
 ## 🤝 Contributing

@@ -1,6 +1,7 @@
 // import rigelsdk from '../index';
-import {service, models} from '../index';
+import { service, models } from '../index';
 import { ImageType } from '../consts/consts';
+
 
 describe('RigelSDK', () => {
   const KEY = 'secretkey';
@@ -46,7 +47,45 @@ describe('RigelSDK', () => {
       new models.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
       -1,
     );
-    expect(data).toBe('fde5eda7214568293ad70621aec2ad1efee5c7fd');
+    expect(data).toBe('http://localhost:8080/rigel/img/fde5eda7214568293ad70621aec2ad1efee5c7fd?X-Signature=ztW09e3EvM5IE7fJNsg0Z5-lPXg');
+  });
+
+  test('batchedCacheImage', async () => {
+    const batchedCachedImageArgs: models.ProxyParams[] = [
+      new models.ProxyParams({
+        img: 'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
+        options: new models.Options({
+          Height: 100,
+          Width: 100,
+          Type: ImageType.WEBP,
+        }),
+      }),
+      new models.ProxyParams({
+        img: 'hhtps://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg',
+        options: new models.Options({
+          Height: 100,
+          Width: 100,
+          Type: ImageType.WEBP,
+        }),
+      }),
+    ];
+
+    try {
+      const result: models.CacheImageResponse[] = await rigelSDK.batchedCacheImage(batchedCachedImageArgs, -1);
+      expect(result).toMatchObject([
+        {
+          "img": "https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg",
+          "signature": "124799fa1f5d2069e1b56793e01f8fe260b87791",
+        },
+        {
+          "img": "hhtps://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg",
+          "signature": "86a9857ba38d4e808dd265f587927858d8917f39",
+        }
+      ])
+    } catch (error) {
+      // TODO: How they fail test in jest?
+      throw new Error(`Error occurred: ${error}`);
+    }
   });
 
   test('tryShortURL', async () => {
@@ -55,6 +94,7 @@ describe('RigelSDK', () => {
       new models.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
       -1,
     );
+
     expect(shortURL).toBe(
       'http://localhost:8080/rigel/img/fde5eda7214568293ad70621aec2ad1efee5c7fd?X-Signature=ztW09e3EvM5IE7fJNsg0Z5-lPXg',
     );

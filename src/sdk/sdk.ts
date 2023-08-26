@@ -38,25 +38,49 @@ export class SDK {
     }
     const signedQueryString = utils.SignQueryString(this.key, this.salt, 'headsup', queryString, expiry);
     const pathURL: string = `${this.baseURL}/headsup?${signedQueryString}`;
+    
     try {
       const response = await axios.post(pathURL);
+      const imageResponse: models.CacheImageResponse = response.data as models.CacheImageResponse
       if (response.status === 200) {
-        return response.data.signature;
+        const signedQueryString = utils.SignQueryString(this.key, this.salt, `img/${imageResponse.signature}`, '', expiry);
+        const pathURL: string = `${this.baseURL}/img/${imageResponse.signature}?${signedQueryString}`;
+        return pathURL;
       } else {
         return response.status;
       }
     } catch (error) {
-      // console.log(`error while trying to cacheImage with imageURL=${imageURL}`);
       return 503;
     }
   }
 
+  async batchedCacheImage(proxyParamsSlice: models.ProxyParams[], expiry: number): Promise<models.CacheImageResponse[]> {
+    const signedQueryString = utils.SignQueryString(this.key, this.salt, 'batched-headsup', '', expiry);
+    const pathURL = `${this.baseURL}/batched-headsup?${signedQueryString}`;
+
+    try {
+      const response = await axios.post(pathURL, proxyParamsSlice, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        // TODO: Fix this to check for whether data satisfies interface or not
+        const result: models.CacheImageResponse[] = response.data as models.CacheImageResponse[];
+        return result
+      } else {
+        throw new Error(`Failed when caching image with status code = ${response.status}`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async tryShortURL(imageURL: string, options: models.Options | null, expiry: number): Promise<string> {
-    const signature = await this.cacheImage(imageURL, options, expiry);
-    if (typeof signature === 'string') {
-      const signedQueryString = utils.SignQueryString(this.key, this.salt, `img/${signature}`, '', expiry);
-      const pathURL: string = `${this.baseURL}/img/${signature}?${signedQueryString}`;
-      return pathURL;
+    const URL = await this.cacheImage(imageURL, options, expiry);
+    if (typeof URL === 'string') {
+      return URL
     }
 
     return await this.proxyImage(imageURL, options, expiry);
