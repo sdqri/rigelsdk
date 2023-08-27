@@ -1,7 +1,8 @@
+/* tslint:disable:max-classes-per-file */
 import * as consts from '../consts/consts';
 
 export class ProxyParams {
-  img: string = "";
+  img: string = '';
   options: Options = new Options();
 
   constructor(source?: Partial<ProxyParams>) {
@@ -12,8 +13,8 @@ export class ProxyParams {
 export interface CacheImageResponse {
   img: string;
   signature: string;
+  short_url: string;
 }
-
 
 export class Options {
   Height?: number;

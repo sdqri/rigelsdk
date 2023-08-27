@@ -1,10 +1,6 @@
-import crypto from 'crypto';
-
 import axios from 'axios';
-import * as jose from 'jose';
 import * as models from '../models/models';
 import * as utils from '../utils/utils';
-import path from 'path';
 
 export class SDK {
   baseURL: string;
@@ -38,14 +34,14 @@ export class SDK {
     }
     const signedQueryString = utils.SignQueryString(this.key, this.salt, 'headsup', queryString, expiry);
     const pathURL: string = `${this.baseURL}/headsup?${signedQueryString}`;
-    
+
     try {
       const response = await axios.post(pathURL);
-      const imageResponse: models.CacheImageResponse = response.data as models.CacheImageResponse
+      const imageResponse: models.CacheImageResponse = response.data as models.CacheImageResponse;
       if (response.status === 200) {
-        const signedQueryString = utils.SignQueryString(this.key, this.salt, `img/${imageResponse.signature}`, '', expiry);
-        const pathURL: string = `${this.baseURL}/img/${imageResponse.signature}?${signedQueryString}`;
-        return pathURL;
+        const sqs = utils.SignQueryString(this.key, this.salt, `img/${imageResponse.signature}`, '', expiry);
+        const URL: string = `${this.baseURL}/img/${imageResponse.signature}?${sqs}`;
+        return URL;
       } else {
         return response.status;
       }
@@ -54,7 +50,10 @@ export class SDK {
     }
   }
 
-  async batchedCacheImage(proxyParamsSlice: models.ProxyParams[], expiry: number): Promise<models.CacheImageResponse[]> {
+  async batchedCacheImage(
+    proxyParamsSlice: models.ProxyParams[],
+    expiry: number,
+  ): Promise<models.CacheImageResponse[]> {
     const signedQueryString = utils.SignQueryString(this.key, this.salt, 'batched-headsup', '', expiry);
     const pathURL = `${this.baseURL}/batched-headsup?${signedQueryString}`;
 
@@ -68,7 +67,11 @@ export class SDK {
       if (response.status === 200) {
         // TODO: Fix this to check for whether data satisfies interface or not
         const result: models.CacheImageResponse[] = response.data as models.CacheImageResponse[];
-        return result
+        for (let index = 0; index < result.length; index++) {
+          const sqs = utils.SignQueryString(this.key, this.salt, `img/${result[index].signature}`, '', expiry);
+          result[index].short_url = `${this.baseURL}/img/${result[index].signature}?${sqs}`;
+        }
+        return result;
       } else {
         throw new Error(`Failed when caching image with status code = ${response.status}`);
       }
@@ -80,7 +83,7 @@ export class SDK {
   public async tryShortURL(imageURL: string, options: models.Options | null, expiry: number): Promise<string> {
     const URL = await this.cacheImage(imageURL, options, expiry);
     if (typeof URL === 'string') {
-      return URL
+      return URL;
     }
 
     return await this.proxyImage(imageURL, options, expiry);

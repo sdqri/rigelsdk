@@ -36,7 +36,7 @@ export function SignQueryString(
   const signableString = signableSlice.join('&');
   const signature = Sign(key, salt, signableString);
   signableSlice.push(`X-Signature=${signature}`);
-  
+
   // Removing request_path
   signableSlice.shift();
 

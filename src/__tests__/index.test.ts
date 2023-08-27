@@ -2,7 +2,6 @@
 import { service, models } from '../index';
 import { ImageType } from '../consts/consts';
 
-
 describe('RigelSDK', () => {
   const KEY = 'secretkey';
   const SALT = 'secretsalt';
@@ -47,7 +46,9 @@ describe('RigelSDK', () => {
       new models.Options({ Width: 300, Height: 300, Type: ImageType.WEBP }),
       -1,
     );
-    expect(data).toBe('http://localhost:8080/rigel/img/fde5eda7214568293ad70621aec2ad1efee5c7fd?X-Signature=ztW09e3EvM5IE7fJNsg0Z5-lPXg');
+    expect(data).toBe(
+      'http://localhost:8080/rigel/img/fde5eda7214568293ad70621aec2ad1efee5c7fd?X-Signature=ztW09e3EvM5IE7fJNsg0Z5-lPXg',
+    );
   });
 
   test('batchedCacheImage', async () => {
@@ -61,7 +62,7 @@ describe('RigelSDK', () => {
         }),
       }),
       new models.ProxyParams({
-        img: 'hhtps://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg',
+        img: 'https://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg',
         options: new models.Options({
           Height: 100,
           Width: 100,
@@ -72,16 +73,21 @@ describe('RigelSDK', () => {
 
     try {
       const result: models.CacheImageResponse[] = await rigelSDK.batchedCacheImage(batchedCachedImageArgs, -1);
-      expect(result).toMatchObject([
+      const expected = [
         {
-          "img": "https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg",
-          "signature": "124799fa1f5d2069e1b56793e01f8fe260b87791",
+          img: 'https://www.pakainfo.com/wp-content/uploads/2021/09/image-url-for-testing.jpg',
+          signature: '124799fa1f5d2069e1b56793e01f8fe260b87791',
+          short_url:
+            'http://localhost:8080/rigel/img/124799fa1f5d2069e1b56793e01f8fe260b87791?X-Signature=oLiW_5SZmf-13KP2eYv1lisJNCI',
         },
         {
-          "img": "hhtps://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg",
-          "signature": "86a9857ba38d4e808dd265f587927858d8917f39",
-        }
-      ])
+          img: 'https://img.freepik.com/premium-photo/baby-cat-british-shorthair_648604-47.jpg',
+          signature: '7fba571dee9007af7964e23239e2a1201419c0b8',
+          short_url:
+            'http://localhost:8080/rigel/img/7fba571dee9007af7964e23239e2a1201419c0b8?X-Signature=8kFZt2kYHTQoUNqPEzleTn7a6QI',
+        },
+      ];
+      expect(JSON.stringify(result)).toBe(JSON.stringify(expected));
     } catch (error) {
       // TODO: How they fail test in jest?
       throw new Error(`Error occurred: ${error}`);
