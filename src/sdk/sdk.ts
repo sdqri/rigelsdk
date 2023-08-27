@@ -67,9 +67,9 @@ export class SDK {
       if (response.status === 200) {
         // TODO: Fix this to check for whether data satisfies interface or not
         const result: models.CacheImageResponse[] = response.data as models.CacheImageResponse[];
-        for (let index = 0; index < result.length; index++) {
-          const sqs = utils.SignQueryString(this.key, this.salt, `img/${result[index].signature}`, '', expiry);
-          result[index].short_url = `${this.baseURL}/img/${result[index].signature}?${sqs}`;
+        for (const cacheImageResponse of result){
+          const sqs = utils.SignQueryString(this.key, this.salt, `img/${cacheImageResponse.signature}`, '', expiry);
+          cacheImageResponse.short_url = `${this.baseURL}/img/${cacheImageResponse.signature}?${sqs}`;
         }
         return result;
       } else {
