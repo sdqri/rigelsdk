@@ -14,37 +14,33 @@ export class SDK {
   }
 
   public async proxyImage(imageURL: string, options: models.Options | null, expiry: number): Promise<string> {
-    let queryString: string = '';
-    if (options?.QueryString() !== '' && options != null) {
-      queryString = utils.SerializeToQuryString({ img: imageURL }) + '&' + options.QueryString();
-    } else {
-      queryString = utils.SerializeToQuryString({ img: imageURL });
-    }
+    const queryString: string =
+      options?.QueryString() !== '' && options != null
+        ? utils.SerializeToQuryString({ img: imageURL }) + '&' + options.QueryString()
+        : utils.SerializeToQuryString({ img: imageURL });
+
     const signedQueryString = utils.SignQueryString(this.key, this.salt, 'proxy', queryString, expiry);
     const pathURL: string = `${this.baseURL}/proxy?${signedQueryString}`;
     return pathURL;
   }
 
   public async cacheImage(imageURL: string, options: models.Options | null, expiry: number): Promise<string | number> {
-    let queryString: string = '';
-    if (options?.QueryString() !== '' && options != null) {
-      queryString = utils.SerializeToQuryString({ img: imageURL }) + '&' + options.QueryString();
-    } else {
-      queryString = utils.SerializeToQuryString({ img: imageURL });
-    }
+    const queryString: string =
+      options?.QueryString() !== '' && options != null
+        ? utils.SerializeToQuryString({ img: imageURL }) + '&' + options.QueryString()
+        : utils.SerializeToQuryString({ img: imageURL });
+
     const signedQueryString = utils.SignQueryString(this.key, this.salt, 'headsup', queryString, expiry);
     const pathURL: string = `${this.baseURL}/headsup?${signedQueryString}`;
 
     try {
       const response = await axios.post(pathURL);
       const imageResponse: models.CacheImageResponse = response.data as models.CacheImageResponse;
-      if (response.status === 200) {
-        const sqs = utils.SignQueryString(this.key, this.salt, `img/${imageResponse.signature}`, '', expiry);
-        const URL: string = `${this.baseURL}/img/${imageResponse.signature}?${sqs}`;
-        return URL;
-      } else {
-        return response.status;
-      }
+      if (response.status !== 200) return response.status;
+
+      const sqs = utils.SignQueryString(this.key, this.salt, `img/${imageResponse.signature}`, '', expiry);
+      const URL: string = `${this.baseURL}/img/${imageResponse.signature}?${sqs}`;
+      return URL;
     } catch (error) {
       return 503;
     }
@@ -64,17 +60,15 @@ export class SDK {
         },
       });
 
-      if (response.status === 200) {
-        // TODO: Fix this to check for whether data satisfies interface or not
-        const result: models.CacheImageResponse[] = response.data as models.CacheImageResponse[];
-        for (const cacheImageResponse of result){
-          const sqs = utils.SignQueryString(this.key, this.salt, `img/${cacheImageResponse.signature}`, '', expiry);
-          cacheImageResponse.short_url = `${this.baseURL}/img/${cacheImageResponse.signature}?${sqs}`;
-        }
-        return result;
-      } else {
-        throw new Error(`Failed when caching image with status code = ${response.status}`);
+      if (response.status !== 200) throw new Error(`Failed when caching image with status code = ${response.status}`);
+
+      // TODO: Fix this to check for whether data satisfies interface or not
+      const result: models.CacheImageResponse[] = response.data as models.CacheImageResponse[];
+      for (const cacheImageResponse of result) {
+        const sqs = utils.SignQueryString(this.key, this.salt, `img/${cacheImageResponse.signature}`, '', expiry);
+        cacheImageResponse.short_url = `${this.baseURL}/img/${cacheImageResponse.signature}?${sqs}`;
       }
+      return result;
     } catch (error) {
       throw error;
     }
